@@ -1,0 +1,3 @@
+# ADAProjectClient
+
+Android Application
