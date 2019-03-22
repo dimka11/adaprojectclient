@@ -35,6 +35,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
     //logging
     private var logger = Logger()
+
+    //write file
     var sdf = SimpleDateFormat("yyyyMMdd_HHmmss")
     var currentDateandTime = sdf.format(Date())
     private var fileWriter = FileWriter(currentDateandTime.toString() + ".csv")
@@ -143,6 +145,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                         )
                 logger.logger(event)
                 makeStringFromData(event)
+                makeJSONFromData(event)
             }
             else -> {
                 // do nothing
@@ -152,13 +155,17 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
     private fun makeStringFromData(event: SensorEvent) {
         val sb = java.lang.StringBuilder()
-        sb.append(event.values[0])
-        sb.append(",")
-        sb.append(event.values[1])
-        sb.append(",")
-        sb.append(event.values[2])
-        sb.append("\n")
+        sb.append(event.values[0]).append(",").append(event.values[1]).append(",").append(event.values[2]).append("\n")
         fileWriter.appendToFile(sb.toString())
+
+
+    }
+
+    private fun makeJSONFromData(event: SensorEvent) {
+        val sb = java.lang.StringBuilder()
+        val json_string = "{ x: " + event.values[0] + ", y: " + event.values[1] + ",z: " + event.values[2] + "}"
+        val networkStream = NetworkStream("http://192.168.1.3:8080/")
+        networkStream.sendData(json_string)
     }
 
 }

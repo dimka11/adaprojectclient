@@ -7,11 +7,6 @@ import android.os.Environment.getExternalStorageDirectory
 import java.io.FileOutputStream
 import java.nio.file.Files.exists
 
-
-
-
-
-
 class FileWriter (val filename: String) {
     lateinit var file: File
     fun createNewFile(){
@@ -23,7 +18,6 @@ class FileWriter (val filename: String) {
     }
 
     fun appendToFile(string: String){
-        val filename = this.filename
         if (file.exists()) {
             FileOutputStream(file, true).use {it.write(string.toByteArray())}
         }
