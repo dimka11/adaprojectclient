@@ -23,15 +23,16 @@ class CallAPI () : AsyncTask<String, String, String>() {
         try {
             val url = URL(urlString)
             val urlConnection = url.openConnection() as HttpURLConnection
+            out = BufferedOutputStream(urlConnection.outputStream)
+            urlConnection.doOutput = true
             urlConnection.requestMethod = "POST"
             urlConnection.setRequestProperty("Content-Type", "application/json")
-            out = BufferedOutputStream(urlConnection.outputStream)
 
             BufferedWriter(OutputStreamWriter(out, "UTF-8")).use{
                 it.write(data)
                 it.flush()
             }
-            out!!.close()
+            out.close()
 
             urlConnection.connect()
 

@@ -6,4 +6,5 @@
     <string name="testTextView">DEBUG</string>
     <string name="testtextview2">testTextView2</string>
     <string name="label_acceleration">Acceleration: %1$.2f %2$.2f %3$.2f</string>
+    <string name="accelerationgr">AccelerationGR: %1$.2f %2$.2f %3$.2f</string>
 </resources>

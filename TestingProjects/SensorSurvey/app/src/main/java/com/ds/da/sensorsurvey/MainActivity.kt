@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.hardware.SensorManager
 import android.icu.util.Calendar
 import android.os.Build
+import android.util.FloatProperty
 import android.util.Log
 import android.view.View
 import android.widget.TextView
@@ -95,7 +96,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             )
         }
 
-        if (mSensorLight != null) {
+        if (mSensorAccelerometer != null) {
             mSensorManager!!.registerListener(
                 this, mSensorAccelerometer,
                 SensorManager.SENSOR_DELAY_FASTEST
@@ -143,6 +144,12 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                             event.values[1],
                             event.values[2]
                         )
+
+
+                accelerationRemoveGravity(event)
+
+
+
                 logger.logger(event)
                 makeStringFromData(event)
                 makeJSONFromData(event)
@@ -151,6 +158,38 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 // do nothing
             }
         }
+    }
+
+    private fun accelerationRemoveGravity(event: SensorEvent) {
+        //Acceleration gravity removed
+        val gravity: Array<Float> = arrayOf(0.0f, 0.0f, 0.0f)
+        val linear_acceleration: Array<Float> = arrayOf(0.0f, 0.0f, 0.0f)
+        // In this example, alpha is calculated as t / (t + dT),
+        // where t is the low-pass filter's time-constant and
+        // dT is the event delivery rate.
+        val alpha: Float = 0.8f
+
+        // Isolate the force of gravity with the low-pass filter.
+        gravity[0] = alpha * gravity[0] + (1 - alpha) * event.values[0]
+        gravity[1] = alpha * gravity[1] + (1 - alpha) * event.values[1]
+        gravity[2] = alpha * gravity[2] + (1 - alpha) * event.values[2]
+
+        // Remove the gravity contribution with the high-pass filter.
+        linear_acceleration[0] = event.values[0] - gravity[0]
+        linear_acceleration[1] = event.values[1] - gravity[1]
+        linear_acceleration[2] = event.values[2] - gravity[2]
+
+        AccelerationGravityRemovedTextView.text = resources.getString(
+            R.string.accelerationgr,
+            event.values[0],
+            event.values[1],
+            event.values[2]
+        )
+
+        /*
+
+                Note: You can use many different techniques to filter sensor data. The code sample above uses a simple filter constant (alpha) to create a low-pass filter. This filter constant is derived from a time constant (t), which is a rough representation of the latency that the filter adds to the sensor events, and the sensor's event delivery rate (dt). The code sample uses an alpha value of 0.8 for demonstration purposes. If you use this filtering method you may need to choose a different alpha value.
+                 */
     }
 
     private fun makeStringFromData(event: SensorEvent) {
