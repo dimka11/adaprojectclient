@@ -26,4 +26,32 @@
             android:id="@+id/textViewSW" android:layout_marginTop="8dp"
             app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toEndOf="@+id/buttonStop"
             android:layout_marginStart="8dp" android:textSize="24sp"/>
+    <Button
+            android:text="WakeLock ON"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonWLStart" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/buttonStart"/>
+    <Button
+            android:text="Wakelock OFF"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonWLStop" app:layout_constraintStart_toEndOf="@+id/buttonWLStart"
+            android:layout_marginStart="8dp" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/buttonStop"/>
+    <Button
+            android:text="Service start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
+            android:id="@+id/buttonFGSStart"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/buttonWLStart"/>
+    <Button
+            android:text="Service stop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonFGServiceStop" app:layout_constraintStart_toEndOf="@+id/buttonFGSStart"
+            android:layout_marginStart="8dp" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/buttonWLStop" android:textAllCaps="true"/>
 </android.support.constraint.ConstraintLayout>
