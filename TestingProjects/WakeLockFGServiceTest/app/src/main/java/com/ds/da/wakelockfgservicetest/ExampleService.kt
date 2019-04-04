@@ -10,7 +10,6 @@ import android.content.Context
 import android.graphics.Color
 import android.support.v4.app.NotificationCompat
 
-
 class ExampleService : Service() {
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -40,7 +39,8 @@ class ExampleService : Service() {
         } else {
             " "
         }
-        val pendingIntent = PendingIntent.getActivity(applicationContext, 0, Intent(applicationContext, MainActivity::class.java), 0)
+        val pendingIntent =
+            PendingIntent.getActivity(applicationContext, 0, Intent(applicationContext, MainActivity::class.java), 0)
         val notification: Notification = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
             .setContentTitle("title")
             .setContentText("text")
@@ -48,7 +48,12 @@ class ExampleService : Service() {
             .setContentIntent(pendingIntent)
             .build()
         startForeground(1, notification)
+
+        mainWorker()
         return START_STICKY
+    }
+
+    fun mainWorker() {
     }
 
     override fun onDestroy() {
