@@ -5,6 +5,7 @@ import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.OnLifecycleEvent
 import android.content.Context
+import android.content.Intent
 import android.os.PowerManager
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -21,7 +22,15 @@ class ButtonsControl : LifecycleObserver {
             if (::wl.isInitialized && wl.isHeld) wl.release()
         }
 
-        owner.buttonFGSStart.setOnClickListener { }
-        owner.buttonFGServiceStop.setOnClickListener { }
+        owner.buttonFGSStart.setOnClickListener {
+            Intent(owner, ExampleService::class.java).also { intent ->
+                owner.startService(intent)
+            }
+        }
+        owner.buttonFGServiceStop.setOnClickListener {
+            Intent(owner, ExampleService::class.java).also { intent ->
+                owner.stopService(intent)
+            }
+        }
     }
 }
