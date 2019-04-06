@@ -75,4 +75,27 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/buttonSAF"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"/>
+    <TextView
+            android:text="Acceleration:"
+            android:layout_width="309dp"
+            android:layout_height="22dp"
+            android:id="@+id/TextViewAccelerometer" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/textViewRetrofit"
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            app:layout_constraintHorizontal_bias="0.0"/>
+    <Button
+            android:text="Bind service"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnBindService" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/TextViewAccelerometer"/>
+    <Button
+            android:text="SayHello"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnSayHello" app:layout_constraintStart_toEndOf="@+id/btnBindService"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/TextViewAccelerometer"/>
 </android.support.constraint.ConstraintLayout>

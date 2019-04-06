@@ -8,12 +8,32 @@ import android.support.annotation.RequiresApi
 import android.widget.Toast
 import android.content.Context
 import android.graphics.Color
+import android.os.Handler
+import android.os.Message
 import android.support.v4.app.NotificationCompat
+import android.os.Messenger
+
 
 class ExampleService : Service() {
+    private lateinit var accelerometerData: AccelerometerData
+    companion object {
+        val MSG_SAY_HELLO = 1
+    }
+
+    val mMessenger = Messenger(IncomingHandler())
+
+    internal inner class IncomingHandler : Handler() {
+        override fun handleMessage(msg: Message) {
+            when (msg.what) {
+                MSG_SAY_HELLO -> Toast.makeText(applicationContext, "hello!", Toast.LENGTH_SHORT).show()
+                else -> super.handleMessage(msg)
+            }
+        }
+    }
 
     override fun onBind(intent: Intent?): IBinder? {
-        return null
+        Toast.makeText(applicationContext, "binding", Toast.LENGTH_SHORT).show()
+        return mMessenger.binder
     }
 
     override fun onCreate() {
@@ -53,10 +73,14 @@ class ExampleService : Service() {
         return START_STICKY
     }
 
-    fun mainWorker() {
+    private fun mainWorker() {
+        accelerometerData = AccelerometerData(applicationContext)
+        accelerometerData()
+
     }
 
     override fun onDestroy() {
         Toast.makeText(this, "service done", Toast.LENGTH_SHORT).show()
+        accelerometerData.unregisterListenter()
     }
 }

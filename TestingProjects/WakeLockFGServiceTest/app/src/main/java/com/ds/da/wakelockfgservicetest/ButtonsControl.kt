@@ -33,10 +33,26 @@ class ButtonsControl : LifecycleObserver {
             }
         }
         owner.buttonFGServiceStop.setOnClickListener {
+            if (owner.mBound) {
+                owner.unbindService(owner.mConnection)
+                owner.mBound = false
+            }
+
             Intent(owner, ExampleService::class.java).also { intent ->
                 owner.stopService(intent)
             }
         }
+        owner.btnBindService.setOnClickListener {
+            owner.bindService(
+                Intent(owner, ExampleService::class.java), owner.mConnection,
+                Context.BIND_AUTO_CREATE
+            )
+        }
+
+        owner.btnSayHello.setOnClickListener{
+            owner.sayHello()
+        }
+
         owner.buttonSAF.setOnClickListener {
             owner.saf()
         }

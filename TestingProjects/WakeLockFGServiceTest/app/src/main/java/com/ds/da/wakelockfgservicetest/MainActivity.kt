@@ -2,15 +2,23 @@ package com.ds.da.wakelockfgservicetest
 
 import android.app.Activity
 import android.support.v7.app.AppCompatActivity
-import android.os.Bundle
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.Transformations
 import kotlinx.android.synthetic.main.activity_main.*
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
+import android.content.IntentFilter
+import android.support.v4.content.LocalBroadcastManager
 import android.util.Log
 import android.widget.Toast
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.ComponentName
+import android.content.ServiceConnection
+import android.os.*
+import android.view.View
+
 
 private const val READ_REQUEST_CODE: Int = 42
 
@@ -18,6 +26,33 @@ class MainActivity : AppCompatActivity() {
     val myServer = MyServer()
     val stopWatch = BasicStopwatch(this)
     val buttonsControl = ButtonsControl()
+
+
+    var mService: Messenger? = null
+    var mBound: Boolean = false
+
+     val mConnection = object : ServiceConnection {
+        override fun onServiceConnected(className: ComponentName, service: IBinder) {
+            mService = Messenger(service)
+            mBound = true
+        }
+
+        override fun onServiceDisconnected(className: ComponentName) {
+            mService = null
+            mBound = false
+        }
+    }
+
+    fun sayHello() {
+        if (!mBound) return
+        val msg = Message.obtain(null, ExampleService.MSG_SAY_HELLO, 0, 0)
+        try {
+            mService?.send(msg)
+        } catch (e: RemoteException) {
+            e.printStackTrace()
+        }
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +73,10 @@ class MainActivity : AppCompatActivity() {
         val model = ViewModelProviders.of(this).get(MyViewModel::class.java)
 
         PermissionRequester(this).request()
+
+
+        registerReceiver(mMessageReceiver, IntentFilter("AccelerometerDataUpdates")
+        )
     }
 
     override fun onRequestPermissionsResult(
@@ -65,23 +104,30 @@ class MainActivity : AppCompatActivity() {
         }
         startActivityForResult(intent, READ_REQUEST_CODE)
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
-
-        // The ACTION_OPEN_DOCUMENT intent was sent with the request code
-        // READ_REQUEST_CODE. If the request code seen here doesn't match, it's the
-        // response to some other intent, and the code below shouldn't run at all.
-
         if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            // The document selected by the user won't be returned in the intent.
-            // Instead, a URI to that document will be contained in the return intent
-            // provided to this method as a parameter.
-            // Pull that URI using resultData.getData().
             resultData?.data?.also { uri ->
                 Log.i("SAF_DEBUG", "Uri: $uri")
-                //showImage(uri)
                 readTextFromUri(this, uri)()
             }
         }
     }
 
+    private val mMessageReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            val message = intent.getStringExtra("Status")
+            val b = intent.getBundleExtra("Acceleration")
+            val accData = b.getParcelable<AccData>("SensorEvent")
+            if (accData != null) {
+                this@MainActivity.TextViewAccelerometer.text =
+                    "accelearation x: ${accData.x} y: ${accData.y} z: ${accData.z} "
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver)
+    }
 }
