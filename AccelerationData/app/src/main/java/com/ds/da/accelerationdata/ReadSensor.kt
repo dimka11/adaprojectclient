@@ -53,7 +53,7 @@ class ReadSensor(val context: Context, val mainActivity: MainActivity) : SensorE
         if (mainActivity.networkStreamON) {
             val sb = java.lang.StringBuilder()
             //val json_string = "{ x: " + event.values[0] + ", y: " + event.values[1] + ",z: " + event.values[2] + "}"
-            val json_string = "{ \"x\": ${event.values[0]},\"y\": ${event.values[0]},\"z\":${event.values[0]}}"
+            val json_string = "{ \"x\": ${event.values[0]},\"y\": ${event.values[1]},\"z\":${event.values[2]}}"
             NetworkStream().execute(mainActivity.editTextURL.text.toString(), json_string)
         }
     }
