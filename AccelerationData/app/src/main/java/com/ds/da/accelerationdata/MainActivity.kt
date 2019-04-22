@@ -111,5 +111,9 @@ class MainActivity : AppCompatActivity() {
         if (::wakeLock.isInitialized && wakeLock.isHeld) wakeLock.release()
     }
 
+    fun getUnixTimestamp(): Long {
+        val unixTime = System.currentTimeMillis() / 1000L
+        return unixTime
+    }
 
 }
