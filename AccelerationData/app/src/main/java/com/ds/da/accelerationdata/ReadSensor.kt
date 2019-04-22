@@ -14,8 +14,7 @@ class ReadSensor(val context: Context, val mainActivity: MainActivity) : SensorE
     private var mSensorAccelerometer: Sensor? = null
 
 
-    fun run() {
-
+    fun run(registered: Boolean, updRate: Int) {
         mSensorManager = context.getSystemService(SENSOR_SERVICE) as SensorManager
         mSensorAccelerometer = mSensorManager!!.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
 
@@ -31,10 +30,43 @@ class ReadSensor(val context: Context, val mainActivity: MainActivity) : SensorE
 
         if (mSensorAccelerometer != null) {
             when (rate) {
-                "SENSOR_DELAY_NORMAL" -> SensorManager.SENSOR_DELAY_NORMAL
-                "SENSOR_DELAY_FASTEST" -> SensorManager.SENSOR_DELAY_FASTEST
-                "SENSOR_DELAY_GAME" -> SensorManager.SENSOR_DELAY_GAME
-                "SENSOR_DELAY_UI" -> SensorManager.SENSOR_DELAY_UI
+                "SENSOR_DELAY_NORMAL" -> {
+                    mSensorManager?.unregisterListener(this)
+                    if (mSensorAccelerometer != null) {
+                        mSensorManager!!.registerListener(
+                            this, mSensorAccelerometer,
+                            SensorManager.SENSOR_DELAY_NORMAL
+                        )
+                    }
+                }
+                "SENSOR_DELAY_FASTEST" -> {
+                    mSensorManager?.unregisterListener(this)
+                    if (mSensorAccelerometer != null) {
+                        mSensorManager!!.registerListener(
+                            this, mSensorAccelerometer,
+                            SensorManager.SENSOR_DELAY_FASTEST
+                        )
+                    }
+                }
+                "SENSOR_DELAY_GAME" -> {
+                    mSensorManager?.unregisterListener(this)
+                    if (mSensorAccelerometer != null) {
+                        mSensorManager!!.registerListener(
+                            this, mSensorAccelerometer,
+                            SensorManager.SENSOR_DELAY_GAME
+                        )
+                    }
+                }
+
+                "SENSOR_DELAY_UI" -> {
+                    mSensorManager?.unregisterListener(this)
+                    if (mSensorAccelerometer != null) {
+                        mSensorManager!!.registerListener(
+                            this, mSensorAccelerometer,
+                            SensorManager.SENSOR_DELAY_UI
+                        )
+                    }
+                }
             }
         }
 

@@ -25,7 +25,13 @@ class FileWriter {
     }
 
     fun createNewFile() {
-        file = File(Environment.getExternalStorageDirectory().toString() + File.separator + makeFileName())
+        val checkDirectory = File(Environment.getExternalStorageDirectory().toString() + "/AccelerationData")
+        if(!checkDirectory.isDirectory) {
+            val newDirectory = File(Environment.getExternalStorageDirectory().toString() + "/AccelerationData/")
+            newDirectory.mkdirs()
+        }
+        file = File(Environment.getExternalStorageDirectory().toString() + "/AccelerationData" + File.separator + makeFileName())
+
         file.createNewFile()
         if (file.exists()) {
             FileOutputStream(file, true).use { it.write("x, y, z \n".toByteArray()) }
