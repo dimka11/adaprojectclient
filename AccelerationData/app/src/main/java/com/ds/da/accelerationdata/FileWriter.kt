@@ -16,25 +16,72 @@ class FileWriter {
         return currentDateandTime.toString() + ".csv"
     }
 
-    fun makeStringFromData(event: SensorEvent?) {
+    fun makeStringFromData(
+        event: SensorEvent?,
+        writeLabel: Boolean,
+        writeTimeStamp: Boolean,
+        editTextWriteLabel: String,
+        lastUnixTimestamp: Long
+    ) {
         val sb = java.lang.StringBuilder()
         if (event != null) {
-            sb.append(event.values[0]).append(",").append(event.values[1]).append(",").append(event.values[2]).append("\n")
+            if (!writeLabel && !writeTimeStamp) {
+                sb.append(event.values[0]).append(",").append(event.values[1]).append(",").append(event.values[2])
+                    .append("\n")
+            }
+            if (writeLabel && writeTimeStamp) {
+                sb.append(editTextWriteLabel).append(",").append(lastUnixTimestamp.toString()).append(",")
+                sb.append(event.values[0]).append(",").append(event.values[1]).append(",").append(event.values[2])
+                    .append("\n")
+            }
+            if (writeLabel && !writeTimeStamp) {
+                sb.append(editTextWriteLabel).append(",")
+                sb.append(event.values[0]).append(",").append(event.values[1]).append(",").append(event.values[2])
+                    .append("\n")
+            }
+            if (!writeLabel && writeTimeStamp) {
+                sb.append(lastUnixTimestamp.toString()).append(",")
+                sb.append(event.values[0]).append(",").append(event.values[1]).append(",").append(event.values[2])
+                    .append("\n")
+            }
+
         }
         this.appendToFile(sb.toString())
     }
 
-    fun createNewFile() {
+    fun createNewFile(
+        writeTimeStamp: Boolean,
+        writeLabel: Boolean,
+        editTextWriteLabel: String
+    ) {
         val checkDirectory = File(Environment.getExternalStorageDirectory().toString() + "/AccelerationData")
-        if(!checkDirectory.isDirectory) {
+        if (!checkDirectory.isDirectory) {
             val newDirectory = File(Environment.getExternalStorageDirectory().toString() + "/AccelerationData/")
             newDirectory.mkdirs()
         }
-        file = File(Environment.getExternalStorageDirectory().toString() + "/AccelerationData" + File.separator + makeFileName())
+        file =
+            File(Environment.getExternalStorageDirectory().toString() + "/AccelerationData" + File.separator + makeFileName())
 
         file.createNewFile()
         if (file.exists()) {
-            FileOutputStream(file, true).use { it.write("x, y, z \n".toByteArray()) }
+            val basic = "x, y, z \n".toByteArray()
+            val withTimeStamp = "timestamp, x, y, z \n".toByteArray()
+            val withLabel = "label, x, y, z \n".toByteArray()
+            val withLabelAndTimestamp = "$editTextWriteLabel, timestamp, x, y, z \n".toByteArray()
+
+            if (!writeTimeStamp && !writeLabel) {
+                FileOutputStream(file, true).use { it.write(basic) }
+            }
+
+            if (writeTimeStamp && writeLabel) {
+                FileOutputStream(file, true).use { it.write(withLabelAndTimestamp) }
+            }
+            if (writeTimeStamp && !writeLabel) {
+                FileOutputStream(file, true).use { it.write(withTimeStamp) }
+            }
+            if (!writeTimeStamp && writeLabel) {
+                FileOutputStream(file, true).use { it.write(withLabel) }
+            }
         }
     }
 

@@ -3,17 +3,13 @@ package com.ds.da.accelerationdata
 import android.content.Context
 import android.graphics.Color
 import android.hardware.SensorEvent
-import android.hardware.SensorManager
-import android.hardware.SensorManager.*
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PowerManager
-import android.support.annotation.RequiresPermission
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import kotlinx.android.synthetic.main.activity_main.*
-import java.io.File
-import android.widget.Toast
 
 
 class MainActivity : AppCompatActivity() {
@@ -25,6 +21,12 @@ class MainActivity : AppCompatActivity() {
     lateinit var wakeLock: PowerManager.WakeLock
     var WLfile = false
     var WLNetwork = false
+    var lastUnixTimestamp: Long = 1
+    private var lastUpdateRate: Long = 1
+    private val updateRateArray = arrayListOf<Long>()
+
+    var isWriteTimeStamp = false
+    var isWriteLabel = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         var fileWasCreated = false
@@ -35,7 +37,7 @@ class MainActivity : AppCompatActivity() {
             writeFileON = !writeFileON
             if (writeFileON) {
                 if (!fileWasCreated) {
-                    fileWriter.createNewFile()
+                    fileWriter.createNewFile(isWriteTimeStamp, isWriteLabel, editTextWriteLabel.text.toString())
                     fileWasCreated = true
                 }
                 WLfile = true
@@ -58,6 +60,29 @@ class MainActivity : AppCompatActivity() {
                 buttonNetworkStream.setBackgroundColor(
                     Color.GRAY
                 )
+            }
+        }
+
+        checkBoxTimeStamp.setOnCheckedChangeListener { buttonView, isChecked ->
+            run {
+                isWriteTimeStamp = isChecked
+            }
+        }
+        checkBoxLabel.setOnCheckedChangeListener { buttonView, isChecked ->
+            run {
+                isWriteLabel = isChecked
+            }
+        }
+
+        switchShowGraph.setOnCheckedChangeListener { buttonView, isChecked ->
+            run {
+                // code to switch graph
+                if (isChecked) {
+                    //Log.v("Switch State=", ""+isChecked)
+                }
+                else {
+                    //Log.v("Switch State=", ""+isChecked)
+                }
             }
         }
 
@@ -112,8 +137,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun getUnixTimestamp(): Long {
-        val unixTime = System.currentTimeMillis() / 1000L
+        //val unixTime = System.currentTimeMillis() / 1000L
+        val unixTime = System.currentTimeMillis()
         return unixTime
+    }
+
+    fun updateRateLabel() {
+        val currentTimestamp = getUnixTimestamp()
+        val time_delta = currentTimestamp - lastUnixTimestamp
+        lastUnixTimestamp = currentTimestamp
+        try {
+            val update_rate = 1000 / time_delta
+            if (lastUpdateRate != update_rate) {
+                textViewUpdRateLabel.text = update_rate.toString()
+            }
+            lastUpdateRate = update_rate
+        } catch (e: java.lang.ArithmeticException) {
+        }
     }
 
 }

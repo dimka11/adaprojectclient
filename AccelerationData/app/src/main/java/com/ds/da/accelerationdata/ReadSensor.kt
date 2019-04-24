@@ -78,8 +78,9 @@ class ReadSensor(val context: Context, val mainActivity: MainActivity) : SensorE
 
     override fun onSensorChanged(event: SensorEvent) {
         mainActivity.updateAccelerationLabel(event)
+        mainActivity.updateRateLabel()
         if (mainActivity.writeFileON) {
-            mainActivity.fileWriter.makeStringFromData(event)
+            mainActivity.fileWriter.makeStringFromData(event, mainActivity.isWriteLabel, mainActivity.isWriteTimeStamp, mainActivity.editTextWriteLabel.text.toString(), mainActivity.lastUnixTimestamp)
         }
 
         if (mainActivity.networkStreamON) {
