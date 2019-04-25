@@ -22,8 +22,8 @@
 
 
     <FrameLayout
-        android:layout_width="0dp"
-        android:layout_height="197dp"
+        android:layout_width="346dp"
+        android:layout_height="380dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
@@ -39,7 +39,7 @@
             android:name="com.example.root.chartgraphview.RealtimeUpdatesFragment"
             class="com.example.root.chartgraphview.RealtimeUpdatesFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="364dp"
             android:layout_marginBottom="96dp"
             app:layout_constraintBottom_toBottomOf="@+id/graph"
             app:layout_constraintEnd_toEndOf="parent"

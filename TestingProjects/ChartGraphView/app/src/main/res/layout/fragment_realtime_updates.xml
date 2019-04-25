@@ -7,14 +7,30 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <com.jjoe64.graphview.GraphView
-        android:id="@+id/FragmentGraph"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp" />
+        android:orientation="vertical">
+
+        <com.jjoe64.graphview.GraphView
+            android:id="@+id/FragmentGraph"
+            android:layout_width="346dp"
+            android:layout_height="184dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp" />
+
+        <com.jjoe64.graphview.GraphView
+            android:id="@+id/FragmentGraph2"
+            android:layout_width="360dp"
+            android:layout_height="134dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp" />
+    </LinearLayout>
 
 </FrameLayout>

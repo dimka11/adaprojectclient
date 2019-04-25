@@ -1,6 +1,7 @@
-package com.example.root.chartgraphview;
+package com.ds.da.accelerationdata;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -33,12 +34,16 @@ import static android.content.Context.SENSOR_SERVICE;
 public class RealtimeUpdatesFragment extends Fragment implements SensorEventListener {
     private SensorManager sensorManager;
     private double magnitude;
+    private double x;
+    private double y;
+    private double z;
 
     private final Handler mHandler = new Handler();
-    private Runnable mTimer1;
     private Runnable mTimer2;
-    private LineGraphSeries<DataPoint> mSeries1;
     private LineGraphSeries<DataPoint> mSeries2;
+    private LineGraphSeries<DataPoint> mSeriesX;
+    private LineGraphSeries<DataPoint> mSeriesY;
+    private LineGraphSeries<DataPoint> mSeriesZ;
     private double graph2LastXValue = 5d;
 
 
@@ -92,18 +97,24 @@ public class RealtimeUpdatesFragment extends Fragment implements SensorEventList
         // Inflate the layout for this fragment
 
         View rootView = inflater.inflate(R.layout.fragment_realtime_updates, container, false);
-        GraphView graph = (GraphView) rootView.findViewById(R.id.FragmentGraph);
-        mSeries1 = new LineGraphSeries<>(generateData());
 
-        try {
-            graph.addSeries(mSeries1);
-        } catch (Exception e) {
-
-        }
 
         GraphView graph2 = (GraphView) rootView.findViewById(R.id.FragmentGraph2);
         mSeries2 = new LineGraphSeries<>();
+        mSeriesX = new LineGraphSeries<>();
+        mSeriesY = new LineGraphSeries<>();
+        mSeriesZ = new LineGraphSeries<>();
+        mSeries2.setColor(Color.rgb(237, 75, 41));
+        mSeriesX.setColor(Color.rgb(70, 230, 25));
+        mSeriesY.setColor(Color.rgb(29, 79, 185));
+        mSeriesZ.setColor(Color.rgb(214, 52, 126));
+
+        graph2.setBackgroundColor(Color.rgb(255, 255, 255));
+
         graph2.addSeries(mSeries2);
+        graph2.addSeries(mSeriesX);
+        graph2.addSeries(mSeriesY);
+        graph2.addSeries(mSeriesZ);
         graph2.getViewport().setXAxisBoundsManual(true);
         graph2.getViewport().setMinX(0);
         graph2.getViewport().setMaxX(40);
@@ -128,11 +139,6 @@ public class RealtimeUpdatesFragment extends Fragment implements SensorEventList
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
-        }
-        //todo fix this
-        if (getArguments() != null) {
-            ((MainActivity) context).onSectionAttached(
-                    getArguments().getInt(MainActivity.ARG_SECTION_NUMBER));
         }
     }
 
@@ -167,8 +173,11 @@ public class RealtimeUpdatesFragment extends Fragment implements SensorEventList
             linear_acceleration[1] = event.values[1] - gravity[1];
             linear_acceleration[2] = event.values[2] - gravity[2];
 
-            //magnitude = Math.sqrt(linear_acceleration[0] * linear_acceleration[0] + linear_acceleration[1] * linear_acceleration[1] + linear_acceleration[2] * linear_acceleration[2]);
-            magnitude = Math.sqrt(gravity[0] * gravity[0] + gravity[1] * gravity[1] + gravity[2] * gravity[2]);
+            magnitude = Math.sqrt(linear_acceleration[0] * linear_acceleration[0] + linear_acceleration[1] * linear_acceleration[1] + linear_acceleration[2] * linear_acceleration[2]);
+            //magnitude = Math.sqrt(event.values[0] * event.values[0] + event.values[1] * event.values[1] + event.values[2] * event.values[2]);
+            x = event.values[0];
+            y = event.values[1];
+            z = event.values[2];
         }
     }
 
@@ -200,49 +209,24 @@ public class RealtimeUpdatesFragment extends Fragment implements SensorEventList
                 sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
                 SensorManager.SENSOR_DELAY_NORMAL);
 
-        mTimer1 = new Runnable() {
-            @Override
-            public void run() {
-                mSeries1.resetData(generateData());
-                mHandler.postDelayed(this, 300);
-            }
-        };
-        mHandler.postDelayed(mTimer1, 300);
 
         mTimer2 = new Runnable() {
             @Override
             public void run() {
                 graph2LastXValue += 1d;
                 mSeries2.appendData(new DataPoint(graph2LastXValue, magnitude), true, 40);
+                mSeriesX.appendData(new DataPoint(graph2LastXValue, x), true, 40);
+                mSeriesY.appendData(new DataPoint(graph2LastXValue, y), true, 40);
+                mSeriesZ.appendData(new DataPoint(graph2LastXValue, z), true, 40);
                 mHandler.postDelayed(this, 200);
             }
         };
         mHandler.postDelayed(mTimer2, 1000);
     }
 
-
     @Override
     public void onPause() {
-        mHandler.removeCallbacks(mTimer1);
         mHandler.removeCallbacks(mTimer2);
         super.onPause();
-    }
-
-
-    private DataPoint[] generateData() {
-        int count = 30;
-        DataPoint[] values = new DataPoint[count];
-        for (int i = 0; i < count; i++) {
-            double x = i;
-            DataPoint v = new DataPoint(x, magnitude);
-            values[i] = v;
-        }
-        return values;
-    }
-
-    double mLastRandom = 2;
-    Random mRand = new Random();
-    private double getRandom() {
-        return mLastRandom += mRand.nextDouble()*0.5 - 0.25;
     }
 }

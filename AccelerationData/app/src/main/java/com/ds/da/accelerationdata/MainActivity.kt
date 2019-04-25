@@ -14,11 +14,14 @@ import android.view.MenuItem
 import android.content.Intent
 import android.preference.PreferenceManager
 import android.content.SharedPreferences
+import android.net.Uri
 
 
+class MainActivity : AppCompatActivity(), RealtimeUpdatesFragment.OnFragmentInteractionListener {
+    override fun onFragmentInteraction(uri: Uri?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
-
-class MainActivity : AppCompatActivity() {
     val DEFAULT_SERVER = "http://192.168.1.3:8080/putData"
     var writeFileON: Boolean = false
     var networkStreamON: Boolean = false
@@ -88,9 +91,9 @@ class MainActivity : AppCompatActivity() {
             run {
                 // code to switch graph
                 if (isChecked) {
-                    //Log.v("Switch State=", ""+isChecked)
+                    frameLayOut.visibility = View.VISIBLE
                 } else {
-                    //Log.v("Switch State=", ""+isChecked)
+                    frameLayOut.visibility = View.GONE
                 }
             }
         }
@@ -106,7 +109,7 @@ class MainActivity : AppCompatActivity() {
             spinnerUpdateRate.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
                     parent: AdapterView<*>,
-                    itemSelected: View, selectedItemPosition: Int, selectedId: Long
+                    itemSelected: View?, selectedItemPosition: Int, selectedId: Long
                 ) {
                     try {
                         readSensor.changeUpdateRate(resources.getStringArray(R.array.updateRates)[selectedItemPosition].toString())
