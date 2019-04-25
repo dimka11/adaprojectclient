@@ -67,6 +67,16 @@ class ReadSensor(val context: Context, val mainActivity: MainActivity) : SensorE
                         )
                     }
                 }
+
+                "5" -> {
+                    mSensorManager?.unregisterListener(this)
+                    if (mSensorAccelerometer != null) {
+                        mSensorManager!!.registerListener(
+                            this, mSensorAccelerometer,
+                            200000
+                        )
+                    }
+                }
             }
         }
 

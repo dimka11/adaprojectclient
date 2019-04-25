@@ -6,5 +6,7 @@
         <item>SENSOR_DELAY_FASTEST</item>
         <item>SENSOR_DELAY_GAME</item>
         <item>SENSOR_DELAY_UI</item>
+        <item>5</item>
     </string-array>
+    <string name="action_settings">Settings</string>
 </resources>
