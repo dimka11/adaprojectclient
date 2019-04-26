@@ -1,26 +1,28 @@
 package com.ds.da.accelerationdata
 
-import android.content.Context
+import android.content.*
 import android.graphics.Color
 import android.hardware.SensorEvent
 import android.support.v7.app.AppCompatActivity
-import android.os.Bundle
-import android.os.PowerManager
 import android.view.View
 import android.widget.AdapterView
 import kotlinx.android.synthetic.main.activity_main.*
 import android.view.Menu
 import android.view.MenuItem
-import android.content.Intent
 import android.preference.PreferenceManager
-import android.content.SharedPreferences
 import android.net.Uri
+import android.os.*
+import android.widget.Toast
 
+private const val READ_REQUEST_CODE: Int = 42
 
 class MainActivity : AppCompatActivity(), RealtimeUpdatesFragment.OnFragmentInteractionListener {
+
     override fun onFragmentInteraction(uri: Uri?) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
+
+    val owner = this
 
     val DEFAULT_SERVER = "http://192.168.1.3:8080/putData"
     var writeFileON: Boolean = false
@@ -44,6 +46,7 @@ class MainActivity : AppCompatActivity(), RealtimeUpdatesFragment.OnFragmentInte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        PermissionRequester(this).request()
 
         editTextURL.setText(DEFAULT_SERVER)
         buttonWriteFile.setOnClickListener {
@@ -99,9 +102,33 @@ class MainActivity : AppCompatActivity(), RealtimeUpdatesFragment.OnFragmentInte
         }
         switchUseService.setOnCheckedChangeListener { buttonView, isChecked ->
             run {
+                if (isChecked) {
+                    Intent(owner, ExampleService::class.java).also { intent ->
+                        owner.startService(intent)
+                    }
+                } else {
+                    if (owner.mBound) {
+                        owner.unbindService(owner.mConnection)
+                        owner.mBound = false
+                    }
 
+                    Intent(owner, ExampleService::class.java).also { intent ->
+                        owner.stopService(intent)
+                    }
+                }
             }
         }
+
+        buttonBindService.setOnClickListener {
+            owner.bindService(
+                Intent(owner, ExampleService::class.java), owner.mConnection,
+                Context.BIND_AUTO_CREATE
+            )
+        }
+        buttonSayHello.setOnClickListener {
+            owner.sayHello()
+        }
+
 
         val readSensor = ReadSensor(this.applicationContext, this)
         readSensor.run(true, 0)
@@ -122,6 +149,40 @@ class MainActivity : AppCompatActivity(), RealtimeUpdatesFragment.OnFragmentInte
             }
         } catch (e: Throwable) {
         }
+
+        registerReceiver(
+            mMessageReceiver, IntentFilter("AccelerometerDataUpdates")
+        )
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<String>, grantResults: IntArray
+    ) {
+        PermissionRequester(this).result(requestCode, permissions, grantResults).onGranted {
+            Toast.makeText(
+                this,
+                "Permission granted to read your External storage",
+                Toast.LENGTH_SHORT
+            ).show()
+        }.onDenied {
+            Toast.makeText(
+                this,
+                "Permission denied to read your External storage",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    private val mMessageReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            val message = intent.getStringExtra("Status")
+            val b = intent.getBundleExtra("Acceleration")
+            val accData = b.getParcelable<AccData>("SensorEvent")
+            if (accData != null) {
+                this@MainActivity.TextViewAccelerometer.text =
+                    "accelearation x: ${accData.x} y: ${accData.y} z: ${accData.z} "
+            }
+        }
     }
 
     override fun onResume() {
@@ -129,6 +190,7 @@ class MainActivity : AppCompatActivity(), RealtimeUpdatesFragment.OnFragmentInte
         val settings = PreferenceManager.getDefaultSharedPreferences(this)
         //val language = settings.getString("language", "")
     }
+
     override fun onPause() {
         super.onPause()
 
@@ -196,6 +258,32 @@ class MainActivity : AppCompatActivity(), RealtimeUpdatesFragment.OnFragmentInte
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    var mService: Messenger? = null
+    var mBound: Boolean = false
+
+    val mConnection = object : ServiceConnection {
+        override fun onServiceConnected(className: ComponentName, service: IBinder) {
+            mService = Messenger(service)
+            mBound = true
+        }
+
+        override fun onServiceDisconnected(className: ComponentName) {
+            mService = null
+            mBound = false
+        }
+    }
+
+    fun sayHello() {
+        if (!mBound) return
+        val msg = Message.obtain(null, ExampleService.MSG_SAY_HELLO, 0, 0)
+        try {
+            mService?.send(msg)
+        } catch (e: RemoteException) {
+            e.printStackTrace()
+        }
+
     }
 
 }
