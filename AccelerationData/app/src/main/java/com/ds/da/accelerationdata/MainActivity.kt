@@ -15,6 +15,7 @@ import android.os.*
 import android.view.WindowManager
 import android.widget.Toast
 
+
 private const val READ_REQUEST_CODE: Int = 42
 
 class MainActivity : AppCompatActivity(), RealtimeUpdatesFragment.OnFragmentInteractionListener {
@@ -138,15 +139,6 @@ class MainActivity : AppCompatActivity(), RealtimeUpdatesFragment.OnFragmentInte
                 }
             }
         }
-
-        buttonPickFile.setOnClickListener {
-
-        }
-
-        buttonUploadFile.setOnClickListener {
-
-        }
-
 
         val readSensor = ReadSensor(this.applicationContext, this)
         readSensor.run(true, 0)
@@ -275,6 +267,11 @@ class MainActivity : AppCompatActivity(), RealtimeUpdatesFragment.OnFragmentInte
                 this.startActivity(intent)
                 true
             }
+            R.id.action_uploadFile -> {
+                val intent = Intent(this, FileUpload::class.java)
+                this.startActivity(intent)
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -304,5 +301,7 @@ class MainActivity : AppCompatActivity(), RealtimeUpdatesFragment.OnFragmentInte
         }
 
     }
+
+
 
 }
