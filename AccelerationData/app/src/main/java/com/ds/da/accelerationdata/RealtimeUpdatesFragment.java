@@ -109,6 +109,11 @@ public class RealtimeUpdatesFragment extends Fragment implements SensorEventList
         mSeriesY.setColor(Color.rgb(29, 79, 185));
         mSeriesZ.setColor(Color.rgb(214, 52, 126));
 
+        mSeries2.setThickness(2);
+        mSeriesX.setThickness(2);
+        mSeriesY.setThickness(2);
+        mSeriesZ.setThickness(2);
+
         graph2.setBackgroundColor(Color.rgb(255, 255, 255));
 
         graph2.addSeries(mSeries2);
@@ -116,9 +121,21 @@ public class RealtimeUpdatesFragment extends Fragment implements SensorEventList
         graph2.addSeries(mSeriesY);
         graph2.addSeries(mSeriesZ);
         graph2.getViewport().setXAxisBoundsManual(true);
-        graph2.getViewport().setMinX(0);
-        graph2.getViewport().setMaxX(40);
+        graph2.getViewport().setMinX(-100);
+        graph2.getViewport().setMaxX(100);
 
+        graph2.getViewport().setYAxisBoundsManual(true);
+        graph2.getViewport().setMinY(-30);
+        graph2.getViewport().setMaxY(30);
+
+        graph2.getViewport().setXAxisBoundsManual(true);
+        graph2.getViewport().setMinX(4);
+        graph2.getViewport().setMaxX(80);
+
+        graph2.getViewport().setScalable(true);
+        graph2.getViewport().setScrollable(true);
+        graph2.getViewport().setScalableY(true);
+        graph2.getViewport().setScrollableY(true);
 
         return rootView;
     }

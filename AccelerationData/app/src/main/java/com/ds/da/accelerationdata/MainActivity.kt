@@ -12,6 +12,7 @@ import android.view.MenuItem
 import android.preference.PreferenceManager
 import android.net.Uri
 import android.os.*
+import android.view.WindowManager
 import android.widget.Toast
 
 private const val READ_REQUEST_CODE: Int = 42
@@ -206,6 +207,7 @@ class MainActivity : AppCompatActivity(), RealtimeUpdatesFragment.OnFragmentInte
         super.onResume()
         val settings = PreferenceManager.getDefaultSharedPreferences(this)
         //val language = settings.getString("language", "")
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     override fun onPause() {
