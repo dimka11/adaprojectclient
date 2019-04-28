@@ -15,13 +15,14 @@ class AccelerometerData(val ctx: Context) {
     val sensorManager = ctx.getSystemService(SENSOR_SERVICE) as SensorManager
     val sensorAccelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
     lateinit var sensorListener: SensorEventListener
-    operator fun invoke() {
+    operator fun invoke(fileWriter: FileWriter) {
         sensorListener = object : SensorEventListener {
             override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
 
             override fun onSensorChanged(event: SensorEvent) {
                 toLog(event)
                 sendMessageToActivity(AccData(event.values[0], event.values[1], event.values[2]), "accelerometer")
+                fileWriter.makeStringFromData(event, false, true, "", getUnixTimestamp())
             }
 
             private fun toLog(event: SensorEvent?) {
@@ -43,6 +44,12 @@ class AccelerometerData(val ctx: Context) {
         bundle.putParcelable("SensorEvent", sensorValues)
         intent.putExtra("Acceleration", bundle)
         ctx.sendBroadcast(intent)
+    }
+
+    fun getUnixTimestamp(): Long {
+        //val unixTime = System.currentTimeMillis() / 1000L
+        val unixTime = System.currentTimeMillis()
+        return unixTime
     }
 
     fun unregisterListenter() {

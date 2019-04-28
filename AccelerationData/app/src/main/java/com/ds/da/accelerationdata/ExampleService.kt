@@ -12,6 +12,8 @@ import android.widget.Toast
 
 class ExampleService : Service() {
     private lateinit var accelerometerData: AccelerometerData
+    private val fileWriter = FileWriter()
+    lateinit var wakeLock: PowerManager.WakeLock
 
     companion object {
         val MSG_SAY_HELLO = 1
@@ -72,12 +74,24 @@ class ExampleService : Service() {
 
     private fun mainWorker() {
         accelerometerData = AccelerometerData(applicationContext)
-        accelerometerData()
+        accelerometerData(fileWriter)
+        prepareToWriteData()
 
     }
+
+    private fun prepareToWriteData() {
+        fileWriter.createNewFile(true, false,"")
+        wakeLock = (getSystemService(Context.POWER_SERVICE) as PowerManager).run {
+            newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "AccData::MyWakelockTag").apply {
+                acquire()
+            }
+        }
+    }
+
 
     override fun onDestroy() {
         Toast.makeText(this, "service done", Toast.LENGTH_SHORT).show()
         accelerometerData.unregisterListenter()
+        if (::wakeLock.isInitialized && wakeLock.isHeld) wakeLock.release()
     }
 }

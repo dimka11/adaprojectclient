@@ -120,9 +120,9 @@ public class RealtimeUpdatesFragment extends Fragment implements SensorEventList
         graph2.addSeries(mSeriesX);
         graph2.addSeries(mSeriesY);
         graph2.addSeries(mSeriesZ);
-        graph2.getViewport().setXAxisBoundsManual(true);
-        graph2.getViewport().setMinX(-100);
-        graph2.getViewport().setMaxX(100);
+       // graph2.getViewport().setXAxisBoundsManual(true);
+       // graph2.getViewport().setMinX(-100);
+       // graph2.getViewport().setMaxX(100);
 
         graph2.getViewport().setYAxisBoundsManual(true);
         graph2.getViewport().setMinY(-30);
@@ -235,10 +235,10 @@ public class RealtimeUpdatesFragment extends Fragment implements SensorEventList
                 mSeriesX.appendData(new DataPoint(graph2LastXValue, x), true, 40);
                 mSeriesY.appendData(new DataPoint(graph2LastXValue, y), true, 40);
                 mSeriesZ.appendData(new DataPoint(graph2LastXValue, z), true, 40);
-                mHandler.postDelayed(this, 200);
+                mHandler.postDelayed(this, 100);
             }
         };
-        mHandler.postDelayed(mTimer2, 1000);
+        mHandler.postDelayed(mTimer2, 500);
     }
 
     @Override
