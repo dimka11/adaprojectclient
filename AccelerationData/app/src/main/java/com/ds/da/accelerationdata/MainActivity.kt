@@ -133,11 +133,16 @@ class MainActivity : AppCompatActivity(), RealtimeUpdatesFragment.OnFragmentInte
         }
 
         buttonDimDisplay.setOnClickListener {
-            val wakelock = (getSystemService(Context.POWER_SERVICE) as PowerManager).run {
+            (getSystemService(Context.POWER_SERVICE) as PowerManager).run {
                 newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "AccData::DisplayDimWakeLock").apply {
                     acquire()
                 }
             }
+
+            val lp = this.window.attributes
+            lp.screenBrightness = 0.00001f// i needed to dim the display
+            this.window.attributes = lp
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         }
 
         val readSensor = ReadSensor(this.applicationContext, this)
