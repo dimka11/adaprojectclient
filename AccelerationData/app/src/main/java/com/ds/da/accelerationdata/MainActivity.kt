@@ -125,8 +125,25 @@ class MainActivity : AppCompatActivity(), RealtimeUpdatesFragment.OnFragmentInte
                 Context.BIND_AUTO_CREATE
             )
         }
+
         buttonSayHello.setOnClickListener {
             owner.sayHello()
+        }
+
+        buttonDimDisplay.setOnClickListener {
+            val wakelock = (getSystemService(Context.POWER_SERVICE) as PowerManager).run {
+                newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "AccData::DisplayDimWakeLock").apply {
+                    acquire()
+                }
+            }
+        }
+
+        buttonPickFile.setOnClickListener {
+
+        }
+
+        buttonUploadFile.setOnClickListener {
+
         }
 
 

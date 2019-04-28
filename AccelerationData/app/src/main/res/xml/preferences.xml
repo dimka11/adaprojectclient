@@ -2,13 +2,17 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="Basic Settings">
     <CheckBoxPreference
-            android:key="checkbox"
+            android:key="write_tiemstamp_checkbox"
             android:summary="Tap to check if on or off"
-            android:title="Checkbox Preference" />
+            android:title="Write timestamp" />
+    <CheckBoxPreference
+            android:key="write_label_checkbox"
+            android:summary="Tap to check if on or off"
+            android:title="Write label" />
     </PreferenceCategory>
     <SwitchPreference
-            android:key="switch"
-            android:title="Switch Preference"
+            android:key="use_service_switch"
+            android:title="Use Service"
             android:summary="Click to switch on or off"
             android:defaultValue="true"/>
     <EditTextPreference
@@ -16,6 +20,31 @@
             android:key="text"
             android:summary="Click to show a text entry dialog"
             android:title="EditText Preference" />
+    <EditTextPreference
+            android:dialogTitle="Enter a label"
+            android:key="label_text"
+            android:summary="set a label"
+            android:title="Label" />
+    <PreferenceCategory android:title="Server Settings">
+        <EditTextPreference
+                android:dialogTitle="Enter a address of first server"
+                android:key="server1_text"
+                android:summary="set first server"
+                android:title="First server" />
+        <EditTextPreference
+                android:dialogTitle="Enter a address of second server"
+                android:key="server2_text"
+                android:summary="set second server"
+                android:title="Second Server" />
+        <ListPreference
+                android:dialogTitle="Select the Server"
+                android:entries="@array/settings_list_preference_servers"
+                android:entryValues="@array/settings_list_preference_servers_values"
+                android:key="update_rate_list"
+                android:summary="Click to choose a server"
+                android:title="Servers" />
+
+    </PreferenceCategory>
     <ListPreference
             android:dialogTitle="Select duration"
             android:entries="@array/settings_list_preference_titles"
@@ -23,4 +52,11 @@
             android:key="list"
             android:summary="Click to show a list to choose from"
             android:title="List Preference" />
+    <ListPreference
+            android:dialogTitle="Select Update Rate"
+            android:entries="@array/settings_list_preference_update_rate"
+            android:entryValues="@array/settings_list_preference_update_rate_values"
+            android:key="update_rate_list"
+            android:summary="Click to show a list to choose from"
+            android:title="Update rate" />
 </PreferenceScreen>

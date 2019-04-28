@@ -16,4 +16,32 @@
         <item>360</item>
         <item>-1</item>
     </string-array>
+
+    <string-array name="settings_list_preference_update_rate">
+        <item>NORMAL</item>
+        <item>FASTEST</item>
+        <item>UI</item>
+        <item>GAME</item>
+        <item>5</item>
+        <item>12</item>
+    </string-array>
+    <string-array name="settings_list_preference_update_rate_values">
+        <item>SENSOR_DELAY_NORMAL</item>
+        <item>SENSOR_DELAY_FASTEST</item>
+        <item>SENSOR_DELAY_UI</item>
+        <item>SENSOR_DELAY_GAME</item>
+        <item>5</item>
+        <item>12</item>
+    </string-array>
+
+    <string-array name="settings_list_preference_servers">
+        <item>First</item>
+        <item>Second</item>
+        <item>Third</item>
+    </string-array>
+    <string-array name="settings_list_preference_servers_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
 </resources>
