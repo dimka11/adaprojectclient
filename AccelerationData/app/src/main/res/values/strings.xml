@@ -7,6 +7,9 @@
         <item>SENSOR_DELAY_GAME</item>
         <item>SENSOR_DELAY_UI</item>
         <item>5</item>
+        <item>12</item>
+        <item>50</item>
+        <item>100</item>
     </string-array>
     <string name="action_settings">Settings</string>
     <string name="action_uploadFile">Upload File</string>
