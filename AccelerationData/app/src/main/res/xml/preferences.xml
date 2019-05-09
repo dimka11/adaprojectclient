@@ -1,62 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="Basic Settings">
-    <CheckBoxPreference
-            android:key="write_tiemstamp_checkbox"
-            android:summary="Tap to check if on or off"
-            android:title="Write timestamp" />
-    <CheckBoxPreference
-            android:key="write_label_checkbox"
-            android:summary="Tap to check if on or off"
-            android:title="Write label" />
+    <PreferenceCategory android:title="System settings">
+        <SwitchPreference
+                android:key="use_service_switch"
+                android:title="Use Service"
+                android:summary="Click to switch on or off"
+                android:defaultValue="true"/>
+        <SwitchPreference
+                android:key="dim_display"
+                android:title="Dim display"
+                android:summary="Click to switch on or off"
+                android:defaultValue="false"/>
     </PreferenceCategory>
-    <SwitchPreference
-            android:key="use_service_switch"
-            android:title="Use Service"
-            android:summary="Click to switch on or off"
-            android:defaultValue="true"/>
-    <EditTextPreference
-            android:dialogTitle="Enter a text"
-            android:key="text"
-            android:summary="Click to show a text entry dialog"
-            android:title="EditText Preference" />
+
+    <PreferenceCategory android:title="Data Format">
+        <CheckBoxPreference
+                android:key="write_tiemstamp"
+                android:summary="Tap to check if on or off"
+                android:title="Write timestamp"/>
+        <CheckBoxPreference
+                android:key="write_label"
+                android:summary="Tap to check if on or off"
+                android:title="Write label"/>
+    </PreferenceCategory>
+
     <EditTextPreference
             android:dialogTitle="Enter a label"
             android:key="label_text"
             android:summary="set a label"
-            android:title="Label" />
+            android:title="Label"/>
     <PreferenceCategory android:title="Server Settings">
         <EditTextPreference
                 android:dialogTitle="Enter a address of first server"
-                android:key="server1_text"
+                android:key="server1"
                 android:summary="set first server"
-                android:title="First server" />
+                android:title="First server"
+                android:defaultValue="http://192.168.1.3:8080/putData"/>
         <EditTextPreference
                 android:dialogTitle="Enter a address of second server"
-                android:key="server2_text"
+                android:key="server2"
                 android:summary="set second server"
-                android:title="Second Server" />
+                android:title="Second Server"
+                android:defaultValue="http://192.168.1.2:8080/putData"/>
+        <EditTextPreference
+                android:dialogTitle="Enter a address of third server"
+                android:key="server3"
+                android:summary="set third server"
+                android:title="Third Server"
+                android:defaultValue="http://192.168.43.168:8080/putData"/>
         <ListPreference
                 android:dialogTitle="Select the Server"
                 android:entries="@array/settings_list_preference_servers"
                 android:entryValues="@array/settings_list_preference_servers_values"
-                android:key="update_rate_list"
+                android:key="chosedServer"
                 android:summary="Click to choose a server"
-                android:title="Servers" />
+                android:title="Servers"/>
 
     </PreferenceCategory>
-    <ListPreference
-            android:dialogTitle="Select duration"
-            android:entries="@array/settings_list_preference_titles"
-            android:entryValues="@array/settings_list_preference_values"
-            android:key="list"
-            android:summary="Click to show a list to choose from"
-            android:title="List Preference" />
-    <ListPreference
-            android:dialogTitle="Select Update Rate"
-            android:entries="@array/settings_list_preference_update_rate"
-            android:entryValues="@array/settings_list_preference_update_rate_values"
-            android:key="update_rate_list"
-            android:summary="Click to show a list to choose from"
-            android:title="Update rate" />
+    <PreferenceCategory android:title="Sensors">
+        <ListPreference
+                android:dialogTitle="Select Update Rate"
+                android:entries="@array/settings_list_preference_update_rate"
+                android:entryValues="@array/settings_list_preference_update_rate_values"
+                android:key="update_rate"
+                android:summary="Click to show a list to choose from"
+                android:title="Update rate"
+                android:defaultValue= "@integer/default_update_rate"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="FileUploadServer Settings">
+        <EditTextPreference
+                android:dialogTitle="Enter a base url of Server to Upload Files"
+                android:key="serverUploadURL"
+                android:summary="set Upload File server"
+                android:title="UploadFile Server URL"
+                android:defaultValue="http://192.168.1.3:8080/"/>
+        <EditTextPreference
+                android:dialogTitle="Enter a path on Server to Upload Files"
+                android:key="serverUploadPath"
+                android:summary="set Upload File server path"
+                android:title="UploadFile Server path"
+                android:defaultValue="fileupload"/>
+        <EditTextPreference
+                android:dialogTitle="Enter a createFormData_name_param"
+                android:key="serverUploadCreateFormDataName"
+                android:summary="CreateFormData (name parameter)"
+                android:title="CreateFormData name parameter"
+                android:defaultValue="file"/>
+    </PreferenceCategory>
+
 </PreferenceScreen>

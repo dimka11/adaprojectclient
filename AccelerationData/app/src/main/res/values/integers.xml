@@ -1,0 +1,3 @@
+<resources>
+        <integer name="default_update_rate">10</integer>
+</resources>

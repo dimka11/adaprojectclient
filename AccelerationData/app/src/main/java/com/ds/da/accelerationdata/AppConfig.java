@@ -16,6 +16,7 @@ class AppConfig {
                 .readTimeout(180, TimeUnit.SECONDS)
                 .writeTimeout(180, TimeUnit.SECONDS)
                 .build();
+        BASE_URL = (String) GetSharedPreferences.invoke("serverUploadURL"); //rewrite base_url from settings
 
         return new Retrofit.Builder()
                 .baseUrl(AppConfig.BASE_URL)

@@ -34,7 +34,8 @@ class AccelerometerData(val ctx: Context) {
             }
 
         }
-        sensorManager.registerListener(sensorListener, sensorAccelerometer, SensorManager.SENSOR_DELAY_FASTEST)
+        val sensorDelay = GetSharedPreferences.getIntValue("update_rate")
+        sensorManager.registerListener(sensorListener, sensorAccelerometer, sensorDelay)
     }
 
     private fun sendMessageToActivity(sensorValues: AccData, msg: String) {

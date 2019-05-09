@@ -76,6 +76,11 @@ public class FileUpload extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         try {
@@ -110,12 +115,16 @@ public class FileUpload extends AppCompatActivity {
                 File file = new File(mediaPath);
 
                 // Parsing any Media type file
+                String createFormDataNameParameter = GetSharedPreferences.invoke("serverUploadCreateFormDataName"); // file is default
                 RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), file);
-                MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
+                MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData(createFormDataNameParameter, file.getName(), requestBody);
                 RequestBody filename = RequestBody.create(MediaType.parse("text/plain"), file.getName());
 
                 ApiConfig getResponse = AppConfig.getRetrofit().create(ApiConfig.class);
-                Call<ServerResponse> call = getResponse.uploadFile(fileToUpload, filename);
+
+                String uploadEndPoint = GetSharedPreferences.invoke("serverUploadPath");
+
+                Call<ServerResponse> call = getResponse.uploadFile(uploadEndPoint, fileToUpload, filename);
                 call.enqueue(new Callback<ServerResponse>() {
                     @Override
                     public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
