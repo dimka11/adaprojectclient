@@ -12,8 +12,7 @@ object GetSharedPreferences{
     }
     fun getIntValue(key: String): Int {
         val settings = PreferenceManager.getDefaultSharedPreferences(MyApplication.getAppContext())!!
-        android.os.Debug.waitForDebugger()
-        return settings.getInt(key, 10)
+        return settings.getString(key, "20000").toInt()
     }
 
 }
