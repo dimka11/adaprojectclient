@@ -1,5 +1,6 @@
 package com.ds.da.accelerationdata
 
+import kotlinx.android.synthetic.main.activity_main.*
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -14,4 +15,19 @@ class ExampleUnitTest {
     fun addition_isCorrect() {
         assertEquals(4, 2 + 2)
     }
+
+    @Test
+    fun `check time stamp`() {
+        assertEquals(MainActivity().getUnixTimestamp(), MainActivity().getUnixTimestamp())
+    }
+    @Test
+    fun `checkupdatelabels`() {
+        val ma = MainActivity()
+        val pre = ma.textViewUpdRateLabel
+        ma.updateRateLabel()
+        val post = ma.textViewUpdRateLabel
+        assertNotEquals(pre, post)
+    }
+
+
 }
