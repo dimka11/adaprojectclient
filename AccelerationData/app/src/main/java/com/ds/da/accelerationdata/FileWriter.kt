@@ -64,10 +64,10 @@ class FileWriter {
 
         file.createNewFile()
         if (file.exists()) {
-            val basic = "x, y, z \n".toByteArray()
+            val basic = "x,y,z\n".toByteArray()
             val withTimeStamp = "timestamp, x, y, z \n".toByteArray()
-            val withLabel = "label, x, y, z \n".toByteArray()
-            val withLabelAndTimestamp = "$editTextWriteLabel, timestamp, x, y, z \n".toByteArray()
+            val withLabel = "label,x,y,z\n".toByteArray()
+            val withLabelAndTimestamp = "$editTextWriteLabel, timestamp,x,y,z\n".toByteArray()
 
             if (!writeTimeStamp && !writeLabel) {
                 FileOutputStream(file, true).use { it.write(basic) }
